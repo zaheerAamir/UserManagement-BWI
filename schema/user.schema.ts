@@ -5,6 +5,8 @@ export interface User {
     name: string,
     salt: string,
     hashPass: string
+    refreshToken: string
+    role: string
 }
 
 export interface UserDTO {
@@ -23,7 +25,9 @@ const userSchema = new Schema<User>({
     email: String,
     name: String,
     salt: String,
-    hashPass: String
+    hashPass: String,
+    refreshToken: String,
+    role: String
 })
 
 export default model<User>("User", userSchema, "User")
@@ -31,4 +35,16 @@ export default model<User>("User", userSchema, "User")
 export interface LoginUserDTO {
     email: string,
     password: string
+}
+
+export interface LoginUser {
+    access_token: string,
+    refresh_token: string
+    message: string
+}
+
+export interface JWTPayload {
+    iat: number,
+    userid: string,
+    exp: number
 }
