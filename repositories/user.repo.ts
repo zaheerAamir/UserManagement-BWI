@@ -11,7 +11,8 @@ export async function createUserRepo(email: string, name: string, salt: string, 
             salt: salt,
             hashPass: hashPass,
             refreshToken: refresh_token,
-            role: "User"
+            role: "User",
+            profileImageUrl: ""
         })
         console.log("[User Repo]", user)
         return user
@@ -32,7 +33,8 @@ export async function createAdminRepo(email: string, name: string, salt: string,
             salt: salt,
             hashPass: hashPass,
             refreshToken: refresh_token,
-            role: "Admin"
+            role: "Admin",
+            profileImageUrl: ""
         })
         console.log("[User Repo]", user)
         return user
@@ -100,7 +102,7 @@ export async function storeRefreshToken(refresh_token: string, userID: Types.Obj
 
 }
 
-export async function updateAccountRepo(userID: string, name: string) {
+export async function updateAccountRepo(userID: string, name: string):Promise<boolean | undefined> {
 
     try {
 
@@ -109,47 +111,17 @@ export async function updateAccountRepo(userID: string, name: string) {
             { $set: { name: name } }
         )
         console.log("[User Repo]", result)
-
-
-    } catch (error) {
-        console.error("[User Repo]", error)
-    }
-
-}
-
-export async function updateUserRepo(adminID: string, userID: string, name: string):Promise<boolean | undefined> {
-
-    try {
-
-        const user = await userSchema.findById(
-            { _id: adminID }
-        )
-        if (user != null) {
-            if (user.role == "Admin") {
-
-                const result = await userSchema.updateOne(
-                    { _id: userID },
-                    { $set: { name: name } }
-                )
-                console.log("[User Repo]", result)
-
-                return true
-
-            } else {
-                console.error("[User Repo] Access Denied! Users are not allowed to access this route.")
-                return false
-            }
-
+        if (result.matchedCount != 0) {
+           return true 
         }
-        console.error("[User Repo] AdminID incorrect!")
         return false
 
 
     } catch (error) {
         console.error("[User Repo]", error)
     }
-}
 
+}
 
 export async function refreshAccessTokenRepo(token: string): Promise<boolean | undefined> {
 
@@ -205,4 +177,32 @@ export async function deleteUserRepo(userID: string): Promise<boolean | undefine
 
         console.error("[User Repo]", error)
     }
+}
+
+
+export async function imageUploadAdminRepo(userID: string, filePath: string): Promise<boolean | undefined> {
+
+    try {
+
+        const url = `http://localhost:8080/${filePath}`
+        const result = await userSchema.updateOne(
+            { _id: userID },
+            { $set: { profileImageUrl: url } }
+        )
+        console.log("[User Repo]", result)
+
+        if (result.matchedCount != 0) {
+
+            return true
+        }
+        return false
+
+
+
+
+    } catch (error) {
+
+        console.error("[User Repo]", error)
+    }
+
 }

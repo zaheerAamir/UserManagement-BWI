@@ -1,4 +1,4 @@
-import { updateAccountRepo, createAdminRepo, createJWTRepo, createUserRepo, deleteUserRepo, loginUserRepo, logoutRepo, refreshAccessTokenRepo, storeRefreshToken, updateUserRepo } from "../repositories/user.repo.js";
+import { updateAccountRepo, createAdminRepo, createJWTRepo, createUserRepo, deleteUserRepo, loginUserRepo, logoutRepo, refreshAccessTokenRepo, storeRefreshToken, imageUploadAdminRepo } from "../repositories/user.repo.js";
 import { LoginUserDTO, UserDTO } from "../schema/user.schema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken"
@@ -142,17 +142,10 @@ export async function createJWT(email: string) {
 
 export async function updateAccountService(userID: string, name: string) {
 
-    updateAccountRepo(userID, name)
-}
-
-export async function updateUserService(adminID: string, userID: string, name: string) {
-    
-    const check = await updateUserRepo(adminID, userID, name)
-    if (check != undefined) {
-       return check 
-    }
+    const check = await updateAccountRepo(userID, name)
     return check
 }
+
 
 export async function refreshAccessTokenService(token: string): Promise<String | undefined> {
 
@@ -222,10 +215,16 @@ export async function logoutService(userID: string) {
 export async function deleteUserService(userID: string) {
 
     const check = await deleteUserRepo(userID)
-    if (check != undefined && check) {
-        return check
+    return check
 
-    }
+
+}
+
+
+export async function imageUploadService(userID: string, filePath: string): Promise<boolean | undefined> {
+
+    const check = await imageUploadAdminRepo(userID, filePath)
     return check
 
 }
+

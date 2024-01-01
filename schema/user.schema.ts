@@ -7,6 +7,7 @@ export interface User {
     hashPass: string
     refreshToken: string
     role: string
+    profileImageUrl: string
 }
 
 export interface UserDTO {
@@ -27,7 +28,8 @@ const userSchema = new Schema<User>({
     salt: String,
     hashPass: String,
     refreshToken: String,
-    role: String
+    role: String,
+    profileImageUrl: String
 })
 
 export default model<User>("User", userSchema, "User")
