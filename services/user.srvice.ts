@@ -120,7 +120,7 @@ export async function createJWT(email: string) {
 
     let accessToken = ""
     if (access_token_secret != undefined) {
-        accessToken = jwt.sign(paylod, access_token_secret, { expiresIn: "1m" })
+        accessToken = jwt.sign(paylod, access_token_secret, { expiresIn: "5m" })
     }
 
     let refreshToken = ""
@@ -177,7 +177,7 @@ export async function refreshAccessTokenService(token: string): Promise<String |
                                 userid: user.userid
                             }
 
-                            accessToken = jwt.sign(paylod, access_token_secret, { expiresIn: "1m" })
+                            accessToken = jwt.sign(paylod, access_token_secret, { expiresIn: "5m" })
                             // console.log("[User Service]",accessToken)
                             return accessToken
                         } else {
